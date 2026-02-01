@@ -1,5 +1,5 @@
 import time
-from tensorflow.keras.callbacks import EarlyStopping
+from keras.callbacks import EarlyStopping
 
 class ModelTrainer:
     def __init__(self, patience=5):
