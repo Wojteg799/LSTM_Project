@@ -58,6 +58,17 @@ def main():
         # --- Experiment Set 4: Optimizers (Fixed: 2 layers, 50 units) ---
         {'name': 'LSTM (SGD Optimizer)', 'units': 50, 'layers': 2, 'dropout': 0.0, 'optimizer': 'sgd'},
         # Adam is default, already used above.
+
+        # --- Experiment Set 5: Learning Rate (Fixed: 2 layers, 50 units, Adam) ---
+        {'name': 'LSTM (High LR 0.01)', 'units': 50, 'layers': 2, 'dropout': 0.0, 'optimizer': 'adam', 'learning_rate': 0.01},
+        {'name': 'LSTM (Low LR 0.0001)', 'units': 50, 'layers': 2, 'dropout': 0.0, 'optimizer': 'adam', 'learning_rate': 0.0001},
+
+        # --- Experiment Set 6: Batch Size (Fixed: 2 layers, 50 units, Adam) ---
+        {'name': 'LSTM (Batch Size 16)', 'units': 50, 'layers': 2, 'dropout': 0.0, 'optimizer': 'adam', 'batch_size': 16},
+        {'name': 'LSTM (Batch Size 64)', 'units': 50, 'layers': 2, 'dropout': 0.0, 'optimizer': 'adam', 'batch_size': 64},
+
+        # --- Experiment Set 7: Deep Network (3 Layers) ---
+        {'name': 'Deep LSTM (3 layers, 50 units)', 'units': 50, 'layers': 3, 'dropout': 0.0, 'optimizer': 'adam'},
     ]
 
     results = []
@@ -75,17 +86,20 @@ def main():
         print(f"\n--- Running Experiment: {exp['name']} ---")
         
         # Build Model
+        lr = exp.get('learning_rate', 0.001) # Default to 0.001 if not specified
         model = ModelBuilder.build_lstm_model(
             input_shape=input_shape,
             units=exp['units'],
             layers=exp['layers'],
             dropout=exp['dropout'],
+            learning_rate=lr,
             optimizer_name=exp['optimizer']
         )
         
         # Train
         # Increased epochs to 10 for better demonstration
-        history, training_time = trainer.train(model, X_train, y_train, epochs=10, batch_size=32)
+        batch_size = exp.get('batch_size', 32) # Default to 32 if not specified
+        history, training_time = trainer.train(model, X_train, y_train, epochs=10, batch_size=batch_size)
         
         # Plot Training History (Loss) for this experiment
         plt.figure(figsize=(10, 6))

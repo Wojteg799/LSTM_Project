@@ -58,6 +58,7 @@ python main.py
 ## Configuration
 You can modify the experiments list in `main.py` to test different architectures. You can also adjust the `epochs` parameter in the training loop for longer training runs.
 
+
 ## Dependencies
 - tensorflow
 - pandas
